@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { NextUIProvider } from '@nextui-org/react'
 import { NextUiProvider } from './components/NextUiProvider'
+import { Navbar } from './components/Navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextUiProvider>
+          <Navbar />
           {children}
         </NextUiProvider>
       </body>
