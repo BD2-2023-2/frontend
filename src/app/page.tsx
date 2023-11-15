@@ -1,8 +1,7 @@
-import { Button } from '@nextui-org/react'
-import Link from 'next/link'
-import { Produto } from './components/Produto'
+import { Produto } from '../components/Produto'
 
 export default function Home() {
+  
   return (
     <main className="flex min-h-screen flex-col items-center gap-10 p-24">
       <div className='flex flex-col md:flex-row gap-5'>
