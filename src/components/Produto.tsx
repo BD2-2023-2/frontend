@@ -1,19 +1,21 @@
 import { Button, Card, CardBody, CardFooter } from "@nextui-org/react"
 import Image from "next/image"
+import { ReactNode } from "react";
 
 type ProdutoProps = {
   id: number;
-  fotoUrl: string;
+  fotoUrl?: string;
   nome: string;
   descricao: string;
+  children: ReactNode;
 }
 
-export const Produto = ({id, fotoUrl, nome, descricao}: ProdutoProps) => {
+export const Produto = ({id, fotoUrl, nome, descricao, children}: ProdutoProps) => {
   return <Card className="w-[20rem]">
     <CardBody>
       <div className="flex w-full">
         <div className="w-1/2 relative">
-          <Image src={fotoUrl} alt="url foto" style={{objectFit: 'cover', borderRadius: '10px'}} fill/>
+          {children}
         </div>
         <div className="flex flex-col justify-center items-center w-full h-full">
           <label>{nome}</label>
