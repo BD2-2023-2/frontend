@@ -3,7 +3,7 @@ import Link from "next/link"
 import {  Search, ShoppingBasket } from "lucide-react"
 
 export const Navbar = () => {
-  return <div className="flex items-center justify-between w-full pt-5 px-10">
+  return <div className="flex items-center justify-between w-full pt-5 px-10 mb-10">
     <div>єcσмм cαƒє</div>
     <div className="flex h-10">
       <Input

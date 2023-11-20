@@ -1,25 +1,27 @@
 'use client'
 
-import { Button } from '@nextui-org/react'
-import { Produto } from '../components/Produto'
+import { useState } from 'react'
+import { Produtos } from './components/ProdutoWrapper'
+import { TProduto } from '../types'
+
+export type CartProps = {
+  produtos: TProduto[]
+}
 
 export default function Home() {
-  
-  const fetchProdutos = async () => {
-    const res = await fetch('http://localhost:3333/api/produtos')
-    const body = await res.json()
+  const [cart, setCart] = useState([]) 
 
-    console.log(body.data)
+  const handleClick = (produto: TProduto) => {
+    setCart([...cart, produto])
 
-    return body.data;
+    console.log(cart)
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center gap-10 p-24">
-      <Button onClick={() => fetchProdutos()}>
-        Buscar Produtos
-      </Button>
-      
+    <main className="flex justify-center gap-10">
+      <Produtos
+        handleClick={handleClick}
+      />
     </main>
   )
 }

@@ -1,16 +1,15 @@
 import { Button, Card, CardBody, CardFooter } from "@nextui-org/react"
 import Image from "next/image"
 import { ReactNode } from "react";
+import { TProduto } from "../types";
 
-type ProdutoProps = {
-  id: number;
-  fotoUrl?: string;
-  nome: string;
-  descricao: string;
+type ProdutoCardProps = {
+  item: TProduto
+  handleClick: (produto: TProduto) => void;
   children: ReactNode;
 }
 
-export const Produto = ({id, fotoUrl, nome, descricao, children}: ProdutoProps) => {
+export const Produto = ({item, children, handleClick}: ProdutoCardProps) => {
   return <Card className="w-[20rem]">
     <CardBody>
       <div className="flex w-full">
@@ -18,9 +17,9 @@ export const Produto = ({id, fotoUrl, nome, descricao, children}: ProdutoProps) 
           {children}
         </div>
         <div className="flex flex-col justify-center items-center w-full h-full">
-          <label>{nome}</label>
-          <span>{descricao}</span>
-          <Button variant='shadow' color="primary" radius="none" size="sm" className="text-black mt-3">
+          <label>{item.id}</label>
+          <span>{item.descricao}</span>
+          <Button variant='shadow' color="primary" radius="none" size="sm" className="text-black mt-3" onClick={() => handleClick(item)}>
             Adicionar ao carrinho
           </Button>
         </div>

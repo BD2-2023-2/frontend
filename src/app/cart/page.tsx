@@ -1,7 +1,7 @@
-import { Produtos } from "./components/produtos";
+import { Produtos } from "../components/ProdutoWrapper";
 
 export default function CartPage() {
   return <div>
-    <Produtos />
+    Carrinho
   </div>
 }
