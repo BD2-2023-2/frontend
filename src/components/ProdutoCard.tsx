@@ -5,11 +5,10 @@ import { TProduto } from "../types";
 
 type ProdutoCardProps = {
   item: TProduto
-  handleClick: (produto: TProduto) => void;
   children: ReactNode;
 }
 
-export const Produto = ({item, children, handleClick}: ProdutoCardProps) => {
+export const Produto = ({item, children}: ProdutoCardProps) => {
   return <Card className="w-[20rem]">
     <CardBody>
       <div className="flex w-full">
@@ -19,7 +18,7 @@ export const Produto = ({item, children, handleClick}: ProdutoCardProps) => {
         <div className="flex flex-col justify-center items-center w-full h-full">
           <label>{item.id}</label>
           <span>{item.descricao}</span>
-          <Button variant='shadow' color="primary" radius="none" size="sm" className="text-black mt-3" onClick={() => handleClick(item)}>
+          <Button variant='shadow' color="primary" radius="none" size="sm" className="text-black mt-3">
             Adicionar ao carrinho
           </Button>
         </div>
