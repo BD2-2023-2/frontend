@@ -33,10 +33,10 @@ export const LoginCard = () => {
     setCookie('user', formData.user)
     setCookie('password', formData.password)
 
-    let produtos
+    let data
     
     try {
-      const res = await fetch('http://localhost:3333/api/produtos', {
+      const res = await fetch('http://localhost:3333/api/auth', {
         headers: { 
           contentType: 'application/json',
           user: getCookie('user'),
@@ -46,18 +46,20 @@ export const LoginCard = () => {
       })
       const body = await res.json()
 
-      produtos = body.data
+      if (res.status !== 200) {
+        setError(body.message)
+      }
+      else {
+        data = body.data
+        router.push('produtos')
+      }
     } catch (err) {
-      console.log(err)
+      setError('Um erro inesperado aconteceu!')
     }
-
-    console.log(produtos)
-
-    router.push('produtos')
   }
 
   return <div className="p-10 flex flex-col gap-5 bg-zinc-100 w-5/12 rounded-lg shadow-md shadow-zinc-400">
-    <h3>Fazer Login</h3>
+    <h3 className="font-bold">Fazer Login</h3>
     <div className="flex flex-col gap-2">
       <Input
         size="sm"
@@ -89,6 +91,9 @@ export const LoginCard = () => {
       />
     </div>
     
-    <Button color="danger" radius="none" onClick={(e) => handleForm(e)} >Entrar</Button>
+    <Button color="danger" radius="none" onClick={(e) => handleForm(e)} >
+      Entrar
+    </Button>
+    {error && <p className="font-bold">{error}</p>}
   </div>
 }

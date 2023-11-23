@@ -9,7 +9,7 @@ export type CartProps = {
 
 export default function Home() {
   return (
-    <main className="flex justify-center gap-10">
+    <main className="flex justify-center items-center gap-10">
       <LoginCard />
     </main>
   )
