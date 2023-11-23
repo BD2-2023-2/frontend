@@ -1,16 +1,7 @@
-'use client'
-
-import { TProduto } from '../types'
-import { LoginCard } from '../components/LoginCard'
-
-export type CartProps = {
-  produtos: TProduto[]
-}
-
 export default function Home() {
   return (
     <main className="flex justify-center items-center gap-10">
-      <LoginCard />
+      <div>Pagina inicial</div>
     </main>
   )
 }
