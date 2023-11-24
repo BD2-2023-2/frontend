@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { NextUiProvider } from '../components/NextUiProvider'
+import { NextUiProvider } from '../components/providers/NextUiProvider'
 import { Navbar } from '../components/Navbar'
+import TanstackProvider from '../components/providers/TanstackProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextUiProvider>
-          <Navbar />
-          {children}
-        </NextUiProvider>
+        <TanstackProvider>
+          <NextUiProvider>
+            <Navbar />
+            {children}
+          </NextUiProvider>
+        </TanstackProvider>
       </body>
     </html>
   )

@@ -1,34 +1,39 @@
 'use client'
 
-import { Button } from "@nextui-org/react"
 import { getCookie } from "cookies-next"
 import { NextRequest, NextResponse } from "next/server"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { TProduto } from "../../types"
+import { MainTable } from "../../components/table/Table"
 
 export default function Page({req, res}: {req: NextRequest, res: NextResponse}) {
   const user = getCookie('user', { req, res })
   const password = getCookie('password', {req, res})
 
-
-  console.log(user, password)
-  
-  const getProdutos = async (event) => {
-    event.preventDefault()
-
-    try {
-      const res = await fetch('http://localhost:3333/api/produtos', {
+  const {data, isLoading, isError} = useQuery({
+    queryKey: ['fetchProdutos'],
+    queryFn: async () => {
+      const { data } = await axios.get('http://localhost:3333/api/produtos', {
         headers: {
-          contentType: 'application/json',
+          "Content-Type": "Application/json",
           user,
           password,
         }
       })
-      const body = await res.json()
 
-      console.log(body.data)
-    }catch(err){}
-  }
+      return data.data as TProduto[]
+    }
+  })
+
+   console.log(data)
+
+  if (isLoading) return <div>Carregando Produtos</div>
+  
+  if(isError) return <div>Houve um erro ao buscar os produtos, tente novamente</div>
   
   return <div>
-    <Button onClick={(e) => getProdutos(e)} >Buscar Produtos</Button>
+    <MainTable produtos={data} />
+    {/* {JSON.stringify(data, null, 2)} */}
   </div>
 }

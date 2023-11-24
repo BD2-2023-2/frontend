@@ -4,7 +4,6 @@ import { EyeSlashFilledIcon } from "./EyeSlashedFilledIcon"
 import { EyeFilledIcon } from "./EyeFilledIcon"
 import {getCookie, setCookie} from 'cookies-next'
 
-import {activeUser, setActiveUser} from '@/app/activeUser'
 import { useRouter } from "next/navigation"
 
 export const LoginCard = () => {
