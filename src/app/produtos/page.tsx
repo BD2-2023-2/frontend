@@ -27,13 +27,15 @@ export default function Page({req, res}: {req: NextRequest, res: NextResponse}) 
   })
 
    console.log(data)
-
-  if (isLoading) return <div>Carregando Produtos</div>
   
   if(isError) return <div>Houve um erro ao buscar os produtos, tente novamente</div>
   
-  return <div>
-    <MainTable produtos={data} />
+  return <div className="h-[20rem]">
+    <MainTable
+      produtos={data}
+      isLoading={isLoading}
+      loadingMessage="Carregando produtos..."
+    />
     {/* {JSON.stringify(data, null, 2)} */}
   </div>
 }

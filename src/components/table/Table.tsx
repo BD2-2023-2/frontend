@@ -1,4 +1,4 @@
-import { Button, Chip, Modal, ModalBody, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react"
+import { Button, Chip, Modal, ModalBody, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react"
 import { TProduto } from "../../types"
 import { EyeIcon, EditIcon, DeleteIcon } from "lucide-react"
 import React from "react"
@@ -12,9 +12,11 @@ const columns = [
 
 export type MainTableProps = {
   produtos?: TProduto[]
+  isLoading: boolean
+  loadingMessage?: string
 }
 
-export const MainTable = ({ produtos }: MainTableProps) => {
+export const MainTable = ({ produtos, isLoading, loadingMessage }: MainTableProps) => {
   const renderCell = React.useCallback((produto: TProduto, columnKey: React.Key) => {
     const cellValue = produto[columnKey as keyof TProduto];
 
@@ -74,8 +76,15 @@ export const MainTable = ({ produtos }: MainTableProps) => {
     </Modal>
   }
 
-  return <Table aria-label="Tabela de Produtos" isStriped >
-    <TableHeader columns={columns}>
+  return <Table
+    aria-label="Tabela de Produtos"
+    isStriped
+    isCompact={false}
+    color="danger"
+    radius="none"
+    className="bg-red"
+  >
+    <TableHeader columns={columns} >
       {
         (column) => (
           <TableColumn key={column.uid} align={column.uid === "quantidade" ? "center": "start"} >
@@ -84,10 +93,15 @@ export const MainTable = ({ produtos }: MainTableProps) => {
         )
       }
     </TableHeader>
-    <TableBody items={produtos} >
+    <TableBody
+      items={produtos ?? []}
+      isLoading={isLoading}
+      emptyContent={ produtos?.length === 0 ? "Nenhum produto encontrado" : ""}
+      loadingContent={<Spinner label={loadingMessage ?? 'Carregando...'} color="danger" />}
+    >
       {
         (produto) => (
-          <TableRow key={produto.id}>
+          <TableRow key={produto.id} >
             {(columnKey) => <TableCell>{renderCell(produto, columnKey)}</TableCell>}
           </TableRow>
         )
