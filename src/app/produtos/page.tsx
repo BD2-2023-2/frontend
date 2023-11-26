@@ -1,18 +1,29 @@
 'use client'
 
 import { getCookie } from "cookies-next"
-import { NextRequest, NextResponse } from "next/server"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { TProduto } from "../../types"
-import { MainTable } from "../../components/table/Table"
+import { TApiResponse, TProduto } from "@/types"
+import { MainTable } from "@/components/table/Table"
+import { Button } from "@nextui-org/react"
+import { PlusIcon } from "@/components/icons/PlusIcon"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
-export default function Page({req, res}: {req: NextRequest, res: NextResponse}) {
-  const user = getCookie('user', { req, res })
-  const password = getCookie('password', {req, res})
+export default function Page() {
+  const [produtos, setProdutos] = useState<TProduto[]>()
+  const router = useRouter()
+
+  const user = getCookie('user')
+  const password = getCookie('password')
+
+  const handleRouting = (id?: number) => {
+    router.push(`produtos/form/${id ?? ''}`)
+  }
 
   const {data, isLoading, isError} = useQuery({
     queryKey: ['fetchProdutos'],
+    retry: 0,
     queryFn: async () => {
       const { data } = await axios.get('http://localhost:3333/api/produtos', {
         headers: {
@@ -24,16 +35,32 @@ export default function Page({req, res}: {req: NextRequest, res: NextResponse}) 
 
       return data.data as TProduto[]
     }
-  })
+  })  
 
-   console.log(data)
+  const handleDelete = (id: number) => {
+    console.log(data)
+    const items = data?.filter((produto) => produto.id === id)
+
+    console.log(items)
+  }
   
-  if(isError) return <div>Houve um erro ao buscar os produtos, tente novamente</div>
-  
-  return <div className="h-[20rem]">
+  return <div className="w-full gap-3">
+    <div className="flex justify-end mb-3 mr-3">
+      <Button
+        radius="md"
+        color="danger"
+        endContent={<PlusIcon />}
+        onClick={() => handleRouting()}
+      >
+        Adicionar
+      </Button>
+    </div>
     <MainTable
       produtos={data}
       isLoading={isLoading}
+      errorMessage={isError ? 'Acesso negado!' : ''}
+      handleRouting={handleRouting}
+      onDelete={handleDelete}
       loadingMessage="Carregando produtos..."
     />
     {/* {JSON.stringify(data, null, 2)} */}

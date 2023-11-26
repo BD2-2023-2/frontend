@@ -31,15 +31,13 @@ export const LoginCard = () => {
 
     setCookie('user', formData.user)
     setCookie('password', formData.password)
-
-    let data
     
     try {
       const res = await fetch('http://localhost:3333/api/auth', {
         headers: { 
           contentType: 'application/json',
-          user: getCookie('user'),
-          password: getCookie('password'),
+          user: getCookie('user') as string,
+          password: getCookie('password') as string,
         },
         method: 'GET',
       })
@@ -49,8 +47,8 @@ export const LoginCard = () => {
         setError(body.message)
       }
       else {
-        data = body.data
-        router.push('produtos')
+        setCookie('idFuncionario', body.data.idFuncionario)
+        router.push('/')
       }
     } catch (err) {
       setError('Um erro inesperado aconteceu!')
