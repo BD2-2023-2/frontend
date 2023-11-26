@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 't2.gstatic.com'
+        hostname: '**'
       }
     ]
   }
