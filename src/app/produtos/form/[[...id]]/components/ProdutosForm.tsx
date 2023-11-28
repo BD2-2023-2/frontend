@@ -20,10 +20,7 @@ export const ProdutosForm = ({
     control,
     handleSubmit,
     watch,
-    getValues,
-    setValue,
     reset,
-    clearErrors,
     formState: { errors }
   } = useForm<z.infer<typeof ProdutoFormSchema>>({
     resolver: zodResolver(ProdutoFormSchema)
@@ -114,7 +111,7 @@ export const ProdutosForm = ({
             classNames={{
               inputWrapper: ''
             }}
-            value={String(data?.idFornecedor) ?? ''}
+            value={data && data.idFornecedor ? data?.idFornecedor : ''}
             onChange={(e) => onEdit(e, 'idFornecedor')}
             size="lg"
             isRequired
@@ -128,7 +125,7 @@ export const ProdutosForm = ({
         type="submit"
         color="danger"
         radius="none"
-        onClick={() => onSubmit(data)}
+        onClick={() => onSubmit(data!)}
       >
         Salvar
       </Button>

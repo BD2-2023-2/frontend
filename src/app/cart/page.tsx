@@ -17,7 +17,7 @@ export default function CartPage() {
     },
       {
         headers: {
-          // user: getCookie('user') as string,
+          user: getCookie('user') as string,
           password: getCookie('password') as string
         }
       }

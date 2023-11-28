@@ -43,14 +43,14 @@ export default function Home() {
           </Button>
         </Link>
         <Link
-          href="/produtos"
+          href="/vendas"
           className="w-full"
         >
           <Button
             color="danger"
             className="w-full"
           >
-            Cadastro de Produtos
+            Listagem de Vendas
           </Button>
         </Link>
       </div>

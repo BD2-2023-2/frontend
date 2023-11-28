@@ -10,7 +10,7 @@ export type CartContainerProps = {
 
 export const CartContainer = ({ items, handleSubmit }: CartContainerProps) => {
   return <div
-    className="flex flex-col items-center justify-center py-5 h-full w-1/2 bg-white border-2 border-zinc-900"
+    className="flex flex-col items-center justify-center py-5 h-full w-1/2 bg-white border-2 border-zinc-900 rounded-lg"
   >
     {items.map((item) => <CartItem
       produto={item.produto}

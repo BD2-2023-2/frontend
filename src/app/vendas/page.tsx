@@ -4,8 +4,16 @@ import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { TVenda } from "@/types"
 import { getCookie } from "cookies-next"
+import { TabelaVendas } from "./components/TabelaVendas"
+import { useRouter } from "next/navigation"
 
 export default function VendasPage() {
+  const router = useRouter()
+
+  const handleRouting = (id: number) => {
+    router.push(`/vendas/${id}`)
+  }
+
   const {data, isLoading, isError} = useQuery({
     queryKey: ['fetchProdutosFromMenu'],
     queryFn: async () => {
@@ -21,5 +29,12 @@ export default function VendasPage() {
     }
   })
   
-  return <div>{JSON.stringify(data)}</div>
+  return <div>
+    <TabelaVendas
+      vendas={data}
+      handleRouting={handleRouting}
+      loadingMessage="Carregando Vendas..."
+      isLoading={isLoading}
+      errorMessage={isError ? 'Erro ao buscar vendas!' : ''} />
+  </div>
 }

@@ -1,5 +1,5 @@
 import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react"
-import { TProduto } from "../../types"
+import { TProduto } from "../../../types"
 import { EditIcon, Trash } from "lucide-react"
 import React from "react"
 import axios from "axios"

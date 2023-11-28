@@ -1,4 +1,4 @@
-import {SVGProps} from "react";
+import {ChangeEvent, SVGProps} from "react";
 
 export type TApiResponse<T> = {
   data: T 
@@ -18,7 +18,10 @@ export type TVenda = {
   id: number;
   valorTotal: number;
   venHorario: Date;
-  idFuncionario: number;
+  funcionario: {
+    id: number;
+    nome: string;
+  };
 }
 
 export type TProdutoPostRequest = {
@@ -50,5 +53,5 @@ export type TForm<T> = {
   isFetching: boolean 
   isPending: boolean 
   onSubmit: (values: T) => void
-  onEdit: (event, name: string) => void
+  onEdit: (event: ChangeEvent, name: string) => void
 }
