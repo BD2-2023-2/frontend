@@ -1,9 +1,7 @@
 import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react"
-import { TProduto } from "../../../types"
+import { TProduto } from "@/types"
 import { EditIcon, Trash } from "lucide-react"
 import React from "react"
-import axios from "axios"
-import { getCookie } from "cookies-next"
 
 const columns = [
   { name: "NOME", uid: "nome" },
@@ -12,7 +10,7 @@ const columns = [
   { name: "AÇÕES", uid: "ações" },
 ]
 
-export type MainTableProps = {
+export type TabelaProdutosProps = {
   produtos?: TProduto[]
   isLoading: boolean
   errorMessage: string
@@ -21,21 +19,7 @@ export type MainTableProps = {
   onDelete: (id: number) => void
 }
 
-export const MainTable = ({ produtos, isLoading, loadingMessage, errorMessage, handleRouting, onDelete }: MainTableProps) => {
-  const handleDelete = async (produto: TProduto) => {
-    try {
-      const {data} = await axios.delete(`http://localhost:3333/api/produtos/${produto.id}`,{
-        headers: {
-          user: getCookie('user') as string,
-          password: getCookie('password') as string,
-        }
-      })
-      onDelete(produto.id)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
+export const TabelaProdutos = ({ produtos, isLoading, loadingMessage, errorMessage, handleRouting, onDelete }: TabelaProdutosProps) => {
   const renderCell = React.useCallback((produto: TProduto, columnKey: React.Key) => {
     const cellValue = produto[columnKey as keyof TProduto];
 
@@ -43,7 +27,7 @@ export const MainTable = ({ produtos, isLoading, loadingMessage, errorMessage, h
       case "nome":
         return (
           <User
-            avatarProps={{radius: "lg", src: produto.fotoUrl}}
+            avatarProps={{radius: "lg", src: produto.fotoUrl ?? ''}}
             description={produto.descricao}
             name={cellValue}
           >
@@ -84,12 +68,13 @@ export const MainTable = ({ produtos, isLoading, loadingMessage, errorMessage, h
 
   return <Table
     classNames={{
-      wrapper: 'h-[40rem]'
+      wrapper: 'h-[25rem]',
     }}
     aria-label="Tabela de Produtos"
     isCompact={false}
+    // isStriped
     color="primary"
-    radius="none"
+    radius="lg"
   >
     <TableHeader columns={columns} >
       {
@@ -104,7 +89,7 @@ export const MainTable = ({ produtos, isLoading, loadingMessage, errorMessage, h
       items={produtos ?? []}
       isLoading={isLoading}
       emptyContent={errorMessage}
-      loadingContent={<Spinner label={loadingMessage ?? 'Carregando...'} color="danger" />}
+      loadingContent={<Spinner label={loadingMessage ?? 'Carregando...'} color="primary" />}
     >
       {
         (produto) => (

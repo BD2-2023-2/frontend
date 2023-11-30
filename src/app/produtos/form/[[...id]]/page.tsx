@@ -13,6 +13,7 @@ export default function ProdutoFormPage({ params: { id } }: TProdutosForm) {
   const router = useRouter()
   
   const [produto, setProduto] = useState<TProduto>()
+  const [isFetching, setIsFetching] = useState(false)
 
   const {enqueueSnackbar} = useSnackbar()
 
@@ -44,6 +45,7 @@ export default function ProdutoFormPage({ params: { id } }: TProdutosForm) {
   const handleSubmit = async (values: TProduto) => {
     if (!hasId) {
       try {
+        setIsFetching(!isFetching)
         const {data} = await axios.post(`http://localhost:3333/api/produtos`, {
           descricao: values.descricao,
           valor: Number(values.valor),
@@ -64,6 +66,8 @@ export default function ProdutoFormPage({ params: { id } }: TProdutosForm) {
         enqueueSnackbar(data.message, {variant: 'success'})
       } catch (error) {
         enqueueSnackbar('Erro ao cadastrar prato', {variant: 'error'})
+      } finally {
+        setIsFetching(!isFetching)
       }
       
     }
@@ -74,7 +78,7 @@ export default function ProdutoFormPage({ params: { id } }: TProdutosForm) {
     onSubmit={handleSubmit}
     onEdit={handleFormEdit}
     id={hasId ? id[0] : null}
-    isFetching={isLoading}
+    isFetching={isFetching}
     isPending={isLoading}
   />
 }

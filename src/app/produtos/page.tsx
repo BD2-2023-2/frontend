@@ -3,16 +3,19 @@
 import { getCookie } from "cookies-next"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { TApiResponse, TProduto } from "@/types"
-import { MainTable } from "@/app/produtos/components/Table"
+import { TProduto } from "@/types"
+import { TabelaProdutos } from "@/app/produtos/components/TabelaProdutos"
 import { Button } from "@nextui-org/react"
 import { PlusIcon } from "@/components/icons/PlusIcon"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useSnackbar } from "notistack"
+import { validaLogin } from "../validaLogin"
 
 export default function Page() {
-  const [produtos, setProdutos] = useState<TProduto[]>()
+  validaLogin()
+
   const router = useRouter()
+  const {enqueueSnackbar} = useSnackbar()
 
   const user = getCookie('user')
   const password = getCookie('password')
@@ -21,7 +24,7 @@ export default function Page() {
     router.push(`produtos/form/${id ?? ''}`)
   }
 
-  const {data, isLoading, isError} = useQuery({
+  const {data, isLoading, isError, refetch} = useQuery({
     queryKey: ['fetchProdutos'],
     retry: 0,
     queryFn: async () => {
@@ -37,25 +40,35 @@ export default function Page() {
     }
   })  
 
-  const handleDelete = (id: number) => {
-    console.log(data)
-    const items = data?.filter((produto) => produto.id === id)
+  const handleDelete = async (id: number) => {
+    try {
+      const { data } = await axios.delete(`http://localhost:3333/api/produtos/${id}`,{
+        headers: {
+          user,
+          password,
+        }
+      })
 
-    console.log(items)
+      enqueueSnackbar(data.message as string, { variant: 'success', autoHideDuration: 2000 })
+      refetch()
+    } catch (err) {
+      console.log('erro aqui')
+      enqueueSnackbar(err as string, {variant: 'error', autoHideDuration: 2000})
+    }
   }
   
-  return <div className="w-full gap-3">
+  return <div className="w-full gap-3 mt-10">
     <div className="flex justify-end mb-3 mr-3">
       <Button
         radius="md"
-        color="danger"
+        color="primary"
         endContent={<PlusIcon />}
         onClick={() => handleRouting()}
       >
         Adicionar
       </Button>
     </div>
-    <MainTable
+    <TabelaProdutos
       produtos={data}
       isLoading={isLoading}
       errorMessage={isError ? 'Acesso negado!' : ''}

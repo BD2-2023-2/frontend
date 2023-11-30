@@ -78,7 +78,7 @@ export const TabelaVendas = ({ vendas, isLoading, loadingMessage, errorMessage, 
       items={vendas ?? []}
       isLoading={isLoading}
       emptyContent={errorMessage}
-      loadingContent={<Spinner label={loadingMessage ?? 'Carregando...'} color="danger" />}
+      loadingContent={<Spinner label={loadingMessage ?? 'Carregando...'} color="primary" />}
     >
       {
         (venda) => (

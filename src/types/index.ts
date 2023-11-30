@@ -52,6 +52,7 @@ export type TForm<T> = {
   data?: T
   isFetching: boolean 
   isPending: boolean 
+  isSendingRequest: boolean
   onSubmit: (values: T) => void
   onEdit: (event: ChangeEvent, name: string) => void
 }

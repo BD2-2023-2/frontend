@@ -1,15 +1,19 @@
-import { Button, Input, user } from "@nextui-org/react"
+import { Button, Card, CardBody, CardHeader, Input, user } from "@nextui-org/react"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { EyeSlashFilledIcon } from "./EyeSlashedFilledIcon"
 import { EyeFilledIcon } from "./EyeFilledIcon"
 import {getCookie, setCookie} from 'cookies-next'
 
 import { useRouter } from "next/navigation"
+import { useSnackbar } from "notistack"
+import axios from "axios"
 
 export const LoginCard = () => {
   const router = useRouter()
 
-  const [error, setError] = useState('')
+  const {enqueueSnackbar} = useSnackbar()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const [isVisible, setIsVisible] = useState(false)
   const toggleVisibility = () => setIsVisible(!isVisible)
@@ -33,7 +37,8 @@ export const LoginCard = () => {
     setCookie('password', formData.password)
     
     try {
-      const res = await fetch('http://localhost:3333/api/auth', {
+      setIsLoading(true)
+      const {data} = await axios.get('http://localhost:3333/api/auth', {
         headers: { 
           contentType: 'application/json',
           user: getCookie('user') as string,
@@ -41,28 +46,27 @@ export const LoginCard = () => {
         },
         method: 'GET',
       })
-      const body = await res.json()
+      
+      enqueueSnackbar(data.message, {variant: 'success', autoHideDuration: 2000})
 
-      if (res.status !== 200) {
-        setError(body.message)
-      }
-      else {
-        setCookie('idFuncionario', body.data.idFuncionario)
-        router.push('/')
-      }
+      setCookie('idFuncionario', data.data.idFuncionario)
+
+      router.push('/')
     } catch (err) {
-      setError('Um erro inesperado aconteceu!')
+      enqueueSnackbar('Usuário ou senha inválidos!', {variant: 'error', autoHideDuration: 2000})
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  return <div className="p-10 flex flex-col gap-5 bg-zinc-100 w-5/12 rounded-lg shadow-md shadow-zinc-400">
-    <h3 className="font-bold">Fazer Login</h3>
-    <div className="flex flex-col gap-2">
+  return <Card className="px-5 flex flex-col gap-5 w-1/3 h-[20rem]">
+    <CardHeader className="font-bold">Fazer Login</CardHeader>
+    <CardBody className="flex flex-col gap-3">
       <Input
         size="sm"
         label="Usuário"
         variant="faded"
-        color="danger"
+        color="primary"
         required
         value={formData.user}
         onChange={(e) => handleFormEdit(e, 'user')}
@@ -71,7 +75,7 @@ export const LoginCard = () => {
         size="sm"
         label="Senha"
         variant="faded"
-        color="danger"
+        color="primary"
         required
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
@@ -86,11 +90,9 @@ export const LoginCard = () => {
         onChange={(e) => handleFormEdit(e, 'password')}
         type={isVisible ? "text" : "password"}
       />
-    </div>
-    
-    <Button color="danger" radius="none" onClick={(e) => handleForm(e)} >
-      Entrar
-    </Button>
-    {error && <p className="font-bold">{error}</p>}
-  </div>
+      <Button color="primary" radius="none" onClick={(e) => handleForm(e)} isLoading={isLoading} >
+        Entrar
+      </Button>
+    </CardBody>
+  </Card>
 }

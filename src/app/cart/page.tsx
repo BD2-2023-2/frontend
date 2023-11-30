@@ -4,32 +4,55 @@ import axios from "axios";
 import { cartItems, cartItemsProps, clearCart } from "../activeCart";
 import { getCookie } from "cookies-next";
 import { CartContainer } from "./components/CartContainer";
-import { TVendaProdutoPostRequest } from "@/types";
+import { TApiResponse, TVendaProdutoPostRequest } from "@/types";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { validaLogin } from "../validaLogin";
 
 export default function CartPage() {
+  validaLogin()
+  
   const [cart, setCart] = useState(cartItems)
+  const { enqueueSnackbar } = useSnackbar()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSell = async () => {
-    await axios.post('http://localhost:3333/api/vendas', {
-      idFuncionario: Number(getCookie('idFuncionario')),
-      produtos: toPostRequest(cartItems),
-    },
-      {
-        headers: {
-          user: getCookie('user') as string,
-          password: getCookie('password') as string
+    try {
+      setIsLoading(!isLoading)
+
+      const {data} = await axios.post('http://localhost:3333/api/vendas', {
+        idFuncionario: Number(getCookie('idFuncionario')),
+        produtos: toPostRequest(cartItems),
+      },
+        {
+          headers: {
+            user: getCookie('user') as string,
+            password: getCookie('password') as string
+          }
         }
-      }
-    ).then(() => { clearCart(); setCart(cartItems) }).catch((err) => console.log(err))
+      )
+
+      enqueueSnackbar(data.message, {
+        variant: 'success',
+        autoHideDuration: 1500
+      })
+
+      clearCart(); setCart(cartItems)
+    } catch (err) {
+      enqueueSnackbar(err as string, {
+        variant: 'error',
+        autoHideDuration: 1500
+      })
+    } finally {
+      setIsLoading(!isLoading)
+    }
   }
 
-  console.log(getCookie('idFuncionario'))
-
-  return <div className="flex flex-col w-full h-[30rem] justify-center items-center">
+  return <div className="mt-10 flex flex-col w-full h-[30rem] justify-center items-center">
     <CartContainer
       items={cart}
       handleSubmit={handleSell}
+      isLoading={isLoading}
     />
   </div>
 }

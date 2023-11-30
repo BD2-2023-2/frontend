@@ -29,7 +29,7 @@ export const ProdutosForm = ({
   useEffect(() => reset(data), [data])
 
   return <form
-    className="px-10 flex flex-col justify-center items-center gap-10 w-full"
+    className="mt-10 px-10 flex flex-col justify-center items-center gap-10 w-full"
     onSubmit={handleSubmit(onSubmit)}
   >
     <div className="flex gap-5">
@@ -111,7 +111,7 @@ export const ProdutosForm = ({
             classNames={{
               inputWrapper: ''
             }}
-            value={data && data.idFornecedor ? data?.idFornecedor : ''}
+            value={data && data.idFornecedor ? data?.idFornecedor.toString() : ''}
             onChange={(e) => onEdit(e, 'idFornecedor')}
             size="lg"
             isRequired
@@ -126,6 +126,7 @@ export const ProdutosForm = ({
         color="danger"
         radius="none"
         onClick={() => onSubmit(data!)}
+        isLoading={isFetching}
       >
         Salvar
       </Button>

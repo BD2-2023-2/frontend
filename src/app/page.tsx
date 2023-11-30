@@ -17,7 +17,7 @@ export default function Home() {
   if (!login) redirect('/auth')
   
   return (
-    <main className="flex flex-col justify-center items-center gap-10">
+    <main className="mt-10 flex flex-col justify-center items-center gap-10">
       <h1 className="font-bold">Pagina inicial</h1>
       <div className="flex flex-col gap-2 items-center">
         <Link
@@ -25,7 +25,7 @@ export default function Home() {
           className="w-full"
         >
           <Button
-            color="danger"
+            color="primary"
             className="w-full"
           >
             Cadastro de Produtos
@@ -36,7 +36,7 @@ export default function Home() {
           className="w-full"
         >
           <Button
-            color="danger"
+            color="primary"
             className="w-full"
           >
             Cardápio
@@ -47,7 +47,7 @@ export default function Home() {
           className="w-full"
         >
           <Button
-            color="danger"
+            color="primary"
             className="w-full"
           >
             Listagem de Vendas

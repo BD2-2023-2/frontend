@@ -2,12 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { TVenda } from "@/types"
+import { TApiResponse, TVenda } from "@/types"
 import { getCookie } from "cookies-next"
 import { TabelaVendas } from "./components/TabelaVendas"
 import { useRouter } from "next/navigation"
+import { validaLogin } from "../validaLogin"
 
 export default function VendasPage() {
+  validaLogin()
   const router = useRouter()
 
   const handleRouting = (id: number) => {
@@ -16,6 +18,7 @@ export default function VendasPage() {
 
   const {data, isLoading, isError} = useQuery({
     queryKey: ['fetchProdutosFromMenu'],
+    retry: 0,
     queryFn: async () => {
       const { data } = await axios.get('http://localhost:3333/api/vendas', {
         headers: {
@@ -25,16 +28,18 @@ export default function VendasPage() {
         }
       })
 
-      return data.data as TVenda[]
+      return data as TApiResponse<TVenda[]>
     }
   })
+
+  console.log(data)
   
   return <div>
     <TabelaVendas
-      vendas={data}
+      vendas={data?.data}
       handleRouting={handleRouting}
       loadingMessage="Carregando Vendas..."
       isLoading={isLoading}
-      errorMessage={isError ? 'Erro ao buscar vendas!' : ''} />
+      errorMessage={isError ? data?.message ?? 'Erro ao buscar vendas!' : ''} />
   </div>
 }

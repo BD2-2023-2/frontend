@@ -5,16 +5,10 @@ import { addItemToCart, cartItems } from "../app/activeCart";
 
 type ProdutoCardProps = {
   item: TProduto
+  handleClick: (produto: TProduto) => void
 }
 
-export const ProdutoCard = ({ item }: ProdutoCardProps) => {
-  const handleClick = (produto: TProduto) => {
-    console.log(cartItems)
-    addItemToCart(produto)
-
-    console.log(cartItems)
-  }
-
+export const ProdutoCard = ({ item, handleClick }: ProdutoCardProps) => {
   return <Card className="w-[20rem]">
     <CardBody>
       <div className="flex w-full">
@@ -32,7 +26,7 @@ export const ProdutoCard = ({ item }: ProdutoCardProps) => {
           <Button
             variant='shadow'
             color="primary"
-            radius="none"
+            radius="sm"
             size="sm"
             className="text-black mt-3"
             onClick={() => handleClick(item)}>
